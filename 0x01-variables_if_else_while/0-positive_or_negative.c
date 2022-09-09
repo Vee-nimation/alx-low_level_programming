@@ -1,24 +1,25 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 /**
-* main -Entry point
-*
-* Details: c program to print -ve, zero and -ve results of a random number
-* Return: 0 (success)
+ * main - Prints a random number and states whether
+ *        it is positive, negative, or zero.
+ *
+ * Return: Always 0.
 */
 int main(void)
 {
-int n;
+	int n;
 
-srand(time(0));
-n = rand() - RAND_MAX / 2;
+	srand(time(0));
+	n = rand() - RAND_MAX / 2;
 
-if (n > 0)
+	if (n > 0)
 		printf("%d is positive\n", n);
-else if (n == 0)
-		printf("%d is zero\n", n);
-else if (n < 0)
+	else if (n < 0)
 		printf("%d is negative\n", n);
-return (0);
+	else
+		printf("%d is zero\n", n);
+
+	return (0);
 }
