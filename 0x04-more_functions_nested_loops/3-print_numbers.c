@@ -1,20 +1,15 @@
 #include "main.h"
 
 /**
-* print_numbers - print numbers to the terminal and return void
-*
-* Description: print numbers from 0 to 9 to the terminal
-* Return: void
+* print_numbers - prints numbers
 */
 
 void print_numbers(void)
 {
-int n;
-n = '0';
-while (n < 10)
+int i;
+for (i = 48; i < 58; i++)
 {
-putchar('0' + n);
-n++;
+_putchar(i);
 }
-putchar('\n');
+_putchar('\n');
 }
