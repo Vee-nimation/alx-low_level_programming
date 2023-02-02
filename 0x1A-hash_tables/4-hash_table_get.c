@@ -1,39 +1,53 @@
 #include "hash_tables.h"
 
 /**
- * hash_table_print - Prints a hash table.
- * @ht: A pointer to the hash table to print.
+ * hash_table_set - Add or update an element in a hash table.
+ * @ht: A pointer to the hash table.
+ * @key: The key to add - cannot be an empty string.
+ * @value: The value associated with key.
  *
- * Description: Key/value pairs are printed in the order
- *              they appear in the array of the hash table.
+ * Return: Upon failure - 0.
+ *         Otherwise - 1.
  */
-void hash_table_print(const hash_table_t *ht)
+int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
-	hash_node_t *node;
-	unsigned long int i;
-	unsigned char comma_flag = 0;
+	hash_node_t *new;
+	char *value_copy;
+	unsigned long int index, i;
 
-	if (ht == NULL)
-		return;
+	if (ht == NULL || key == NULL || *key == '\0' || value == NULL)
+		return (0);
 
-	printf("{");
-	for (i = 0; i < ht->size; i++)
+	value_copy = strdup(value);
+	if (value_copy == NULL)
+		return (0);
+
+	index = key_index((const unsigned char *)key, ht->size);
+	for (i = index; ht->array[i]; i++)
 	{
-		if (ht->array[i] != NULL)
+		if (strcmp(ht->array[i]->key, key) == 0)
 		{
-			if (comma_flag == 1)
-				printf(", ");
-
-			node = ht->array[i];
-			while (node != NULL)
-			{
-				printf("'%s': '%s'", node->key, node->value);
-				node = node->next;
-				if (node != NULL)
-					printf(", ");
-			}
-			comma_flag = 1;
+			free(ht->array[i]->value);
+			ht->array[i]->value = value_copy;
+			return (1);
 		}
 	}
-	printf("}\n");
+
+	new = malloc(sizeof(hash_node_t));
+	if (new == NULL)
+	{
+		free(value_copy);
+		return (0);
+	}
+	new->key = strdup(key);
+	if (new->key == NULL)
+	{
+		free(new);
+		return (0);
+	}
+	new->value = value_copy;
+	new->next = ht->array[index];
+	ht->array[index] = new;
+
+	return (1);
 }
